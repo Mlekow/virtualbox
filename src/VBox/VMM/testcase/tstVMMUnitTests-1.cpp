@@ -69,6 +69,7 @@ int main(int argc, char **argv)
             if (RT_SUCCESS(rc))
             {
                 testPGM(pVM);
+                testPGMMemMap(pVM);
 
                 /*
                  * Clean up.

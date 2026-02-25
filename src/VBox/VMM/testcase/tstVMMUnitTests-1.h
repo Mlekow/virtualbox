@@ -37,6 +37,7 @@
 extern RTTEST g_hTest;
 
 void testPGM(PVM pVM);
+void testPGMMemMap(PVM pVM);
 
 #endif /* !VMM_INCLUDED_SRC_testcase_tstVMMUnitTests_1_h */
 

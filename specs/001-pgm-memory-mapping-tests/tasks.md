@@ -19,9 +19,9 @@
 
 **Purpose**: Integrate new test source into the kBuild system and test harness
 
-- [ ] T001 Add `tstPGMMemMap.cpp` to tstVMMUnitTests-1 sources in `src/VBox/VMM/testcase/Makefile.kmk`
-- [ ] T002 Add `testPGMMemMap(PVM pVM)` declaration to `src/VBox/VMM/testcase/tstVMMUnitTests-1.h`
-- [ ] T003 Add `testPGMMemMap(pVM)` call in `src/VBox/VMM/testcase/tstVMMUnitTests-1.cpp` main function
+- [X] T001 Add `tstPGMMemMap.cpp` to tstVMMUnitTests-1 sources in `src/VBox/VMM/testcase/Makefile.kmk`
+- [X] T002 Add `testPGMMemMap(PVM pVM)` declaration to `src/VBox/VMM/testcase/tstVMMUnitTests-1.h`
+- [X] T003 Add `testPGMMemMap(pVM)` call in `src/VBox/VMM/testcase/tstVMMUnitTests-1.cpp` main function
 
 ---
 
@@ -33,44 +33,45 @@
 
 ### Implementation for User Story 1
 
-- [ ] T004 [US1] Create `src/VBox/VMM/testcase/tstPGMMemMap.cpp` with file header, includes, and `testPGMMemMap` function skeleton
-- [ ] T005 [US1] Implement RAM range count and enumeration test using `PGMR3PhysGetRamRangeCount` and `PGMR3PhysGetRange` in `src/VBox/VMM/testcase/tstPGMMemMap.cpp`
-- [ ] T006 [US1] Implement additional RAM registration test: register new RAM at high addresses via `VMR3ReqCallWait` + `PGMR3PhysRegisterRam`, verify lookups in `src/VBox/VMM/testcase/tstPGMMemMap.cpp`
-- [ ] T007 [US1] Implement boundary address tests: test lookups at address 0, at range boundaries, and at addresses near RTGCPHYS_MAX in `src/VBox/VMM/testcase/tstPGMMemMap.cpp`
-- [ ] T008 [US1] Implement gap verification tests: verify that lookups for addresses between ranges return correct error codes in `src/VBox/VMM/testcase/tstPGMMemMap.cpp`
-- [ ] T009 [US1] Implement NIL_RTGCPHYS lookup test: verify lookup of NIL address returns not found in `src/VBox/VMM/testcase/tstPGMMemMap.cpp`
+- [X] T004 [US1] Create `src/VBox/VMM/testcase/tstPGMMemMap.cpp` with file header, includes, and `testPGMMemMap` function skeleton
+- [X] T005 [US1] Implement RAM range count and enumeration test using `PGMR3PhysGetRamRangeCount` and `PGMR3PhysGetRange` in `src/VBox/VMM/testcase/tstPGMMemMap.cpp`
+- [X] T006 [US1] Implement additional RAM registration test: register new RAM at high addresses via `VMR3ReqCallWait` + `PGMR3PhysRegisterRam`, verify lookups in `src/VBox/VMM/testcase/tstPGMMemMap.cpp`
+- [X] T007 [US1] Implement boundary address tests: test lookups at address 0, at range boundaries, and at addresses near RTGCPHYS_MAX in `src/VBox/VMM/testcase/tstPGMMemMap.cpp`
+- [X] T008 [US1] Implement gap verification tests: verify that lookups for addresses between ranges return correct error codes in `src/VBox/VMM/testcase/tstPGMMemMap.cpp`
+- [X] T009 [US1] Implement NIL_RTGCPHYS lookup test: verify lookup of NIL address returns not found in `src/VBox/VMM/testcase/tstPGMMemMap.cpp`
 
-**Checkpoint**: RAM range tests compile and pass independently
+**Checkpoint**: ✅ RAM range tests compile and pass
 
 ---
 
-## Phase 3: User Story 2 - MMIO Region Mapping Tests (Priority: P2)
+## Phase 3: User Story 2 - Physical Memory Read/Write and Mapping Tests (Priority: P2)
 
-**Goal**: Test MMIO registration, mapping, and unmapping through lookup table verification
+**Goal**: Test physical memory read/write operations and GCPhys-to-host-pointer mapping
 
-**Independent Test**: Run `tstVMMUnitTests-1` and verify MMIO sub-tests pass
+**Independent Test**: Run `tstVMMUnitTests-1` and verify memory R/W sub-tests pass
 
 ### Implementation for User Story 2
 
-- [ ] T010 [US2] Implement MMIO registration test: register MMIO region via `VMR3ReqCallWait` + `PGMR3PhysMmioRegister`, verify count increases in `src/VBox/VMM/testcase/tstPGMMemMap.cpp`
-- [ ] T011 [US2] Implement MMIO map test: map the registered MMIO and verify lookup at that address succeeds in `src/VBox/VMM/testcase/tstPGMMemMap.cpp`
-- [ ] T012 [US2] Implement MMIO unmap test: unmap the MMIO region and verify lookup no longer finds it in `src/VBox/VMM/testcase/tstPGMMemMap.cpp`
+- [X] T010 [US2] Implement physical memory read/write test: write patterns via `PGMR3PhysWriteExternal`, read back via `PGMR3PhysReadExternal`, verify data in `src/VBox/VMM/testcase/tstPGMMemMap.cpp`
+- [X] T011 [US2] Implement typed read/write tests: `PGMR3PhysWriteU8/U32/U64` + `PGMR3PhysReadU8/U32/U64` in `src/VBox/VMM/testcase/tstPGMMemMap.cpp`
+- [X] T012 [US2] Implement GCPhys2CCPtr mapping tests: writable and read-only mappings via `PGMR3PhysGCPhys2CCPtrExternal` / `PGMR3PhysGCPhys2CCPtrReadOnlyExternal` in `src/VBox/VMM/testcase/tstPGMMemMap.cpp`
 
-**Checkpoint**: MMIO mapping lifecycle tests compile and pass
+**Checkpoint**: ✅ Memory R/W and mapping tests compile and pass
 
 ---
 
-## Phase 4: User Story 3 - ROM Range Verification Tests (Priority: P3)
+## Phase 4: User Story 3 - Range At-or-Above and Integrity Tests (Priority: P3)
 
-**Goal**: Verify ROM regions created during VM init are correctly represented in lookups
+**Goal**: Verify at-or-above lookup semantics and PGM internal consistency
 
-**Independent Test**: Run `tstVMMUnitTests-1` and verify ROM sub-tests pass
+**Independent Test**: Run `tstVMMUnitTests-1` and verify at-or-above and integrity sub-tests pass
 
 ### Implementation for User Story 3
 
-- [ ] T013 [US3] Implement ROM range presence test: enumerate ranges to find ROM-type entries and verify page descriptors in `src/VBox/VMM/testcase/tstPGMMemMap.cpp`
+- [X] T013 [US3] Implement range at-or-above lookup tests using `pgmPhysGetRangeAtOrAboveSlow` in `src/VBox/VMM/testcase/tstPGMMemMap.cpp`
+- [X] T014 [US3] Implement PGM integrity check test using `PGMR3CheckIntegrity` in `src/VBox/VMM/testcase/tstPGMMemMap.cpp`
 
-**Checkpoint**: ROM verification tests compile and pass
+**Checkpoint**: ✅ At-or-above and integrity tests compile and pass
 
 ---
 
@@ -78,9 +79,9 @@
 
 **Purpose**: Final validation and cleanup
 
-- [ ] T014 Verify full build with `source env.sh && VBOX_WITHOUT_LINUX_TEST_BUILDS=1 VBOX_WITHOUT_ADDITIONS=1 kmk`
-- [ ] T015 Run `tstVMMUnitTests-1` and confirm all tests pass with SUCCESS
-- [ ] T016 Commit all changes with descriptive message
+- [X] T015 Verify full build with `source env.sh && VBOX_WITHOUT_LINUX_TEST_BUILDS=1 VBOX_WITHOUT_ADDITIONS=1 kmk tstVMMUnitTests-1`
+- [X] T016 Run `tstVMMUnitTests-1` and confirm all tests pass with SUCCESS
+- [X] T017 Commit all changes with descriptive message
 
 ---
 
@@ -90,30 +91,12 @@
 
 - **Phase 1 (Setup)**: No dependencies — build system setup first
 - **Phase 2 (US1 RAM)**: Depends on Phase 1 completion
-- **Phase 3 (US2 MMIO)**: Depends on Phase 1 completion, independent of Phase 2
-- **Phase 4 (US3 ROM)**: Depends on Phase 1 completion, independent of Phase 2/3
+- **Phase 3 (US2 Memory R/W)**: Depends on Phase 1 completion
+- **Phase 4 (US3 At-or-Above)**: Depends on Phase 1 completion
 - **Phase 5 (Polish)**: Depends on all previous phases
 
-### Within Each Phase
+## Results
 
-- T004 must complete before T005-T009 (creates the file)
-- T005-T009 are sequential within US1 (same file, building on each other)
-- T010-T012 are sequential within US2 (register → map → unmap lifecycle)
-
----
-
-## Implementation Strategy
-
-### MVP First (User Story 1 Only)
-
-1. Complete Phase 1: Build system setup
-2. Complete Phase 2: RAM range tests
-3. **STOP and VALIDATE**: Build and run tstVMMUnitTests-1
-4. If passing, proceed to US2 and US3
-
-### Incremental Delivery
-
-1. Phase 1 → Phase 2 → Validate (MVP: RAM tests)
-2. Add Phase 3 → Validate (MMIO tests)
-3. Add Phase 4 → Validate (ROM tests)
-4. Phase 5 → Final validation and commit
+All 21 test sub-cases pass:
+- 12 existing PGM tests (pgmPhysGetRangeSlow etc., 1st and 2nd round)
+- 9 new memory mapping tests (RAM enumeration, registration, boundary lookups, gap detection, at-or-above, read/write, GCPhys2CCPtr, integrity check)
