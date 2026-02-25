@@ -97,6 +97,20 @@
 
 ## Results
 
-All 21 test sub-cases pass:
+### tstVMMUnitTests-1 (21 sub-tests)
 - 12 existing PGM tests (pgmPhysGetRangeSlow etc., 1st and 2nd round)
 - 9 new memory mapping tests (RAM enumeration, registration, boundary lookups, gap detection, at-or-above, read/write, GCPhys2CCPtr, integrity check)
+
+### tstPGMMmio (12 sub-tests)
+Standalone MMIO/ROM memory layout test binary:
+- Range enumeration with MMIO detection (VGA buffer at 0xA0000)
+- RAM range flags and page types classification
+- Page type walk (32672 RAM, 32 MMIO, 56 ROM pages)
+- Lookup table ordering verification
+- MMIO hole detection (~3.9GB gap)
+- MMIO range properties (32 MMIO pages, all correct type)
+- MMIO read/write behavior
+- MMIO/RAM boundary transitions
+- ROM range properties (5 ROM ranges: VGA BIOS, DMI, Net Boot ROM, PC BIOS x2)
+- Unmapped region read/write + adjacent integrity
+- Final PGM integrity check
