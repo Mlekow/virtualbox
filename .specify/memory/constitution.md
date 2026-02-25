@@ -1,50 +1,37 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!-- Sync Impact Report
+  Version: 0.0.0 → 1.0.0
+  Modified principles: All (initial creation)
+  Added sections: Core Principles (5), Build System, Governance
+  Removed sections: None
+  Templates requiring updates: ✅ constitution.md
+  Follow-up TODOs: None
+-->
+
+# VirtualBox VMM Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. C/C++ Systems Programming Standards
+All VMM code MUST be written in C/C++ following VirtualBox coding conventions. Code MUST compile without errors under GCC 13+ with warnings-as-errors enabled. All public APIs MUST use VirtualBox declaration macros (VMMR3DECL, VMM_INT_DECL, etc.) and follow the existing naming conventions (PGM prefix for Page Manager, etc.).
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### II. Test-Driven Quality Assurance
+Every new VMM subsystem feature or bug fix MUST include corresponding unit tests. Tests MUST be self-contained and runnable in driverless mode (SUPR3INIT_F_DRIVERLESS) without requiring kernel modules or hardware virtualization. Tests MUST use the IPRT test framework (RTTest*) and follow the existing test patterns in `src/VBox/VMM/testcase/`.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### III. Ring-Aware Architecture
+Code MUST respect the ring separation model: Ring-3 (R3) for user-mode management, Ring-0 (R0) for kernel-mode execution, and shared code (All) for functions used across rings. Test code operates in Ring-3 context. Internal APIs use `_INT_DECL` variants; external APIs use standard `DECL` variants.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### IV. Build System Integration
+All test targets MUST be properly integrated into the kBuild system via `Makefile.kmk` entries. Tests MUST link against `VMMStatic`, `DisasmR3`, and `Runtime` libraries. Build targets MUST use appropriate templates (`VBoxR3Exe` for full VM tests, `VBoxR3TstExe` for standalone tests).
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### V. Backward Compatibility and Safety
+Changes MUST NOT break existing functionality. Memory management code MUST handle edge cases (boundary addresses, NIL values, empty ranges). All guest physical address operations MUST validate inputs and return appropriate VBox status codes (VINF_SUCCESS, VERR_PGM_INVALID_GC_PHYSICAL_ADDRESS, etc.).
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+## Build System
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
-
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
-
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+VirtualBox uses the kBuild build system with `kmk` as the make command. Configuration is done via `./configure` which generates `AutoConfig.kmk` and `env.sh`. Source `env.sh` before building. Test binaries are output to `out/linux.amd64/release/bin/testcase/`.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+This constitution governs all VMM development within the VirtualBox project scope. Amendments require documentation of rationale and impact assessment. All code contributions MUST comply with these principles and pass the existing CI/build system validation.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.0.0 | **Ratified**: 2026-02-25 | **Last Amended**: 2026-02-25
